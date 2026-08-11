@@ -1,0 +1,18 @@
+spring:
+  cloud:
+    aws:
+      s3:
+        endpoint: ${STORAGE_ENDPOINT}
+        region: ${STORAGE_REGION}
+        path-style-access-enabled: true
+      credentials:
+        access-key: ${STORAGE_ACCESS_KEY}
+        secret-key: ${STORAGE_SECRET_KEY}
+app:
+  sb:
+    bucket: ${STORAGE_BUCKET}
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
