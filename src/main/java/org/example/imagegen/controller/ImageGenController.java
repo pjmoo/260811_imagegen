@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/gen")
@@ -25,11 +26,13 @@ public class ImageGenController {
 
     @PostMapping
     public String form(
-            @Validated @NotBlank @Size(max = 500) @RequestParam String prompt
+            @Validated @NotBlank @Size(max = 500) @RequestParam String prompt,
+            RedirectAttributes ra
     ) {
         System.out.println("prompt = " + prompt);
         GenResultDTO result = imageGenService.generate(prompt);
         System.out.println("result = " + result);
+        ra.addFlashAttribute("result", result);
         return "redirect:/gen";
     }
 }
