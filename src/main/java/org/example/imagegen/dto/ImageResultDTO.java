@@ -1,4 +1,7 @@
 package org.example.imagegen.dto;
 
-public record ImageResultDTO(String key, String prompt, String improved) {
+public record ImageResultDTO(
+        String filename,
+        String prompt,
+        String improved) {
 }

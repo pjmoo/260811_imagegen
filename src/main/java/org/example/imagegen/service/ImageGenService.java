@@ -40,7 +40,7 @@ public class ImageGenService {
     private final S3Template s3Template;
 
     // import org.springframework.beans.factory.annotation.Value;
-    @Value("app.sb.bucket")
+    @Value("${app.sb.bucket}")
     private String bucket;
 
     public String upload(GenResultDTO result) {
@@ -50,6 +50,8 @@ public class ImageGenService {
         ObjectMetadata metadata = ObjectMetadata.builder()
                 .contentType(MediaType.IMAGE_JPEG_VALUE)
                 .build();
+        System.out.println("bucket = " + bucket);
+        System.out.println("filename = " + filename);
         s3Template.upload(bucket, filename,
                 data, metadata);
         return filename; // 호출 시 Key 값 filename만 return
