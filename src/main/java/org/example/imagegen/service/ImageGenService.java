@@ -6,16 +6,20 @@ import lombok.RequiredArgsConstructor;
 import org.example.imagegen.dto.GenRequestDTO;
 import org.example.imagegen.dto.GenResultDTO;
 import org.example.imagegen.dto.ImageResultDTO;
+import org.example.imagegen.entity.GenImage;
+import org.example.imagegen.repository.GenImageJpaRepository;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClient;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -31,11 +35,24 @@ public class ImageGenService {
         return invokeImage(improved);
     }
 
+    private final GenImageJpaRepository repository;
+
+    @Transactional
     public ImageResultDTO generateImage(String prompt) {
         String improved = improvePrompt(prompt);
         GenResultDTO result = generate(improved);
         String key = upload(result);
+        repository.save(GenImage.builder()
+                .filename(key)
+                .prompt(prompt)
+                .improved(improved)
+                .build());
         return new ImageResultDTO(key, prompt, improved);
+    }
+
+    @Transactional(readOnly = true)
+    public List<GenImage> findAll() {
+        return repository.findAll();
     }
 
     private final S3Template s3Template;

@@ -29,5 +29,14 @@
     <p>번역/개선된 프롬프트 : [[${result.improved}]]</p>
     <img th:src="@{/gen/{f}(f=${result.filename})}" width="240" alt="생성된 이미지">
 </section>
+
+<section th:unless="${images.isEmpty()}">
+    <hr>
+    <div th:each="image : ${images}">
+        <p>직접 입력한 프롬프트 : [[${image.prompt}]]</p>
+        <p>번역/개선된 프롬프트 : [[${image.improved}]]</p>
+        <img th:src="@{/gen/{f}(f=${image.filename})}" width="240" alt="생성된 이미지">
+    </div>
+</section>
 </body>
 </html>
