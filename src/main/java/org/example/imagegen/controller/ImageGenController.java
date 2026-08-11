@@ -3,7 +3,7 @@ package org.example.imagegen.controller;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
-import org.example.imagegen.dto.GenResultDTO;
+import org.example.imagegen.dto.ImageResultDTO;
 import org.example.imagegen.service.ImageGenService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -30,8 +30,9 @@ public class ImageGenController {
             RedirectAttributes ra
     ) {
         System.out.println("prompt = " + prompt);
-        GenResultDTO result = imageGenService.generate(prompt);
+//        GenResultDTO result = imageGenService.generate(prompt);
 //        System.out.println("result = " + result);
+        ImageResultDTO result = imageGenService.generateImage(prompt);
         ra.addFlashAttribute("result", result);
         return "redirect:/gen";
     }
