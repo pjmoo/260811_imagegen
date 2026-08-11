@@ -9,6 +9,11 @@
 </head>
 <body>
 <h1>이미지 만들어봅시다!</h1>
-<a th:href="@{/gen}">이미지 생성</a>
+<section>
+    <form th:action="@{/gen}" method="post">
+        <input type="text" name="prompt" placeholder="이미지 생성할 내용을 입력해주세요">
+        <button>이미지 생성</button>
+    </form>
+</section>
 </body>
 </html>
