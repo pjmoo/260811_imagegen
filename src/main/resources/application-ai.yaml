@@ -1,0 +1,9 @@
+spring:
+  ai:
+    openai:
+      api-key: ${GROQ_API_KEY}
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
