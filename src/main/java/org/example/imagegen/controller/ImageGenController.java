@@ -31,7 +31,7 @@ public class ImageGenController {
     ) {
         System.out.println("prompt = " + prompt);
         GenResultDTO result = imageGenService.generate(prompt);
-        System.out.println("result = " + result);
+//        System.out.println("result = " + result);
         ra.addFlashAttribute("result", result);
         return "redirect:/gen";
     }
