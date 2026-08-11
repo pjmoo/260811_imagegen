@@ -5,12 +5,12 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.example.imagegen.dto.ImageResultDTO;
 import org.example.imagegen.service.ImageGenService;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -35,5 +35,13 @@ public class ImageGenController {
         ImageResultDTO result = imageGenService.generateImage(prompt);
         ra.addFlashAttribute("result", result);
         return "redirect:/gen";
+    }
+
+    @GetMapping("/{filename}")
+    // import org.springframework.core.io.Resource;
+    public ResponseEntity<Resource> download(@PathVariable String filename) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(imageGenService.download(filename));
     }
 }

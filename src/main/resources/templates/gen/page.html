@@ -21,10 +21,13 @@
     </form>
 </section>
 <section th:if="${result}">
-    [[${result}]]
+    <!--/* [[${result}]] */-->
     <!--/* [[${result.result.image}]] */-->
     <!--/* <img th:src="'data:image/jpeg;base64,' + ${result.result.image}" */-->
     <!--/* width="240" alt="생성된 이미지"> */-->
+    <p>직접 입력한 프롬프트 : [[${result.prompt}]]</p>
+    <p>번역/개선된 프롬프트 : [[${result.improved}]]</p>
+    <img th:src="@{/gen/{f}(f=${result.filename})}" width="240" alt="생성된 이미지">
 </section>
 </body>
 </html>
