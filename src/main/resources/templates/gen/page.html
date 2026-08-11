@@ -21,7 +21,9 @@
     </form>
 </section>
 <section th:if="${result}">
-    [[${result}]]
+    <!--    [[${result}]]-->
+    <!--    [[${result.image}]]-->
+    <img th:src="'data:image/jpeg;base64,' + ${result.image}'" width="240" alt="생성된 이미지">
 </section>
 </body>
 </html>
