@@ -1,12 +1,21 @@
 package org.example.imagegen.service;
 
+import io.awspring.cloud.s3.ObjectMetadata;
+import io.awspring.cloud.s3.S3Template;
 import lombok.RequiredArgsConstructor;
 import org.example.imagegen.dto.GenRequestDTO;
 import org.example.imagegen.dto.GenResultDTO;
+import org.example.imagegen.dto.ImageResultDTO;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Base64;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +28,31 @@ public class ImageGenService {
 //        return invokeImage(prompt);
         String improved = improvePrompt(prompt);
         return invokeImage(improved);
+    }
+
+    public ImageResultDTO generateImage(String prompt) {
+        String improved = improvePrompt(prompt);
+        GenResultDTO result = generate(improved);
+        String key = upload(result);
+        return new ImageResultDTO(key, prompt, improved);
+    }
+
+    private final S3Template s3Template;
+
+    // import org.springframework.beans.factory.annotation.Value;
+    @Value("app.sb.bucket")
+    private String bucket;
+
+    public String upload(GenResultDTO result) {
+        String filename = "%s.jpg".formatted(UUID.randomUUID());
+        byte[] bytes = Base64.getDecoder().decode(result.result().image());
+        InputStream data = new ByteArrayInputStream(bytes);
+        ObjectMetadata metadata = ObjectMetadata.builder()
+                .contentType(MediaType.IMAGE_JPEG_VALUE)
+                .build();
+        s3Template.upload(bucket, filename,
+                data, metadata);
+        return filename; // 호출 시 Key 값 filename만 return
     }
 
     private final ChatClient promptImproveClient;
