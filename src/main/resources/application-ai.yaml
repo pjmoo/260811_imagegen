@@ -2,6 +2,11 @@ spring:
   ai:
     openai:
       api-key: ${GROQ_API_KEY}
+      # https://console.groq.com/docs/openai
+      base-url: https://api.groq.com/openai/v1
+      chat:
+        # https://console.groq.com/docs/models
+        model: openai/gpt-oss-120b
 app:
   cf:
     account-id: ${CF_ACCOUNT_ID}
