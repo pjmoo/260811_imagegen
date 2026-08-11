@@ -1,5 +1,8 @@
 package org.example.imagegen.config;
 
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
 import org.springframework.boot.http.client.HttpClientSettings;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +14,20 @@ import java.time.Duration;
 
 @Configuration
 public class ImageGenConfig {
+    @Bean
+    ChatClient promptImproveClient(ChatModel model) {
+        return ChatClient.builder(model)
+                .defaultSystem(
+                        """
+                                - 전달받은 내용을 500자 이내의 영문으로 된 이미지 생성용 프롬프트로 개선
+                                - 특징이 잘 드러나게 자세하지만 간결한 표현으로 구성
+                                """)
+                .defaultOptions(ChatOptions.builder()
+                        .temperature(0.3)
+                        .maxTokens(1000))
+                .build();
+    }
+
     @Bean
     RestClient cfWorkersAiClient(RestClient.Builder b, CFProperty p) {
         HttpClientSettings settings = HttpClientSettings.defaults()
